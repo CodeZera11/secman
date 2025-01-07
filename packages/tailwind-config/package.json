@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": "./tailwind.config.ts"
+    "./tailwind.config": "./tailwind.config.ts",
+    "./global.css": "./global.css"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
   },
   "dependencies": {
-    "tailwindcss": "^3.4.1"
+    "@repo/ui": "workspace:*",
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7"
   }
 }
