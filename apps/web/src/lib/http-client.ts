@@ -2,11 +2,18 @@ import { BASE_API_URL } from "@/constants/api";
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:4000/api',
+  baseURL: BASE_API_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
+});
+
+axiosClient.interceptors.response.use((response: any) => {
+  if (response && response.data) {
+    return response.data;
+  }
+  return response;
 });
 
 export default class HttpClient {
