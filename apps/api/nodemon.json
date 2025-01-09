@@ -1,0 +1,10 @@
+{
+  "watch": [
+    ".",
+    "pipes/",
+    "src/",
+    "*"
+  ],
+  "ext": "js,ts,json",
+  "exec": "ts-node --require tsconfig-paths/register src/main.ts"
+}
