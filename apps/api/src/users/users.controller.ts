@@ -3,17 +3,16 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UsePipes,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ZodValidationPipe } from 'pipes/zod-validation.pipe';
 import {
   type CreateUserRequest,
   CreateUserRequestDtoSchema,
 } from '@repo/types';
+import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 
 @Controller('users')
 export class UsersController {
