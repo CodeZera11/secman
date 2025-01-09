@@ -15,8 +15,10 @@ export function useCreateUserMutation() {
 }
 
 export function useGetUsers() {
-  return useQuery({
+  const response = useQuery({
     queryKey: ["users"],
     queryFn: () => usersClient.all(),
   });
+
+  return { ...response };
 }

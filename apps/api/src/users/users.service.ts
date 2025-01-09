@@ -18,8 +18,12 @@ export class UsersService {
   }
 
   async findAll() {
+    const count = await this.prisma.user.count();
     const users = await this.prisma.user.findMany();
-    return users;
+    return {
+      data: users,
+      count,
+    };
   }
 
   findOne(id: number) {
