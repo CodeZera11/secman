@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { type CreateUserRequest } from '@repo/types';
+import { prisma } from '@repo/db';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
-
   async create(data: CreateUserRequest) {
-    const user = await this.prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
@@ -18,8 +16,8 @@ export class UsersService {
   }
 
   async findAll() {
-    const count = await this.prisma.user.count();
-    const users = await this.prisma.user.findMany();
+    const count = await prisma.user.count();
+    const users = await prisma.user.findMany();
     return {
       data: users,
       count,

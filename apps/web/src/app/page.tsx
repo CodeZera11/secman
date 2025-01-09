@@ -1,4 +1,3 @@
-import LoginGithub from "@/components/github-login";
 import Logout from "@/components/logout";
 import Navbar from "@/components/navbar";
 import UserContainer from "@/components/user-container"
