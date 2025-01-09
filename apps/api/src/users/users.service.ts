@@ -7,12 +7,14 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserRequest) {
-    console.log({ data });
-    await this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
-        email: 'test@gmail.com',
+        email: data.email,
+        name: data.name,
       },
     });
+
+    return user;
   }
 
   findAll() {
