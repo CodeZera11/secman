@@ -63,7 +63,7 @@ const nextAuth = NextAuth({
 
 const signIn: NextAuthResult["signIn"] = nextAuth.signIn;
 const auth: NextAuthResult["auth"] = nextAuth.auth;
-const handlers = nextAuth.handlers;
+const { GET, POST } = nextAuth.handlers;
 const signOut = nextAuth.signOut;
 
-export { handlers, auth, signIn, signOut };
+export { GET, POST, auth, signIn, signOut };
