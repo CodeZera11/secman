@@ -43,6 +43,14 @@
     },
     "db:migrate": {
       "cache": false
+    },
+    "start": {
+      "dependsOn": [
+        "^start"
+      ],
+      "inputs": [
+        ".env*"
+      ]
     }
   }
 }
