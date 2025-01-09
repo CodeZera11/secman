@@ -11,6 +11,7 @@
     "build": "tsc",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
+    "db:migrate": "prisma migrate dev",
     "dev": "tsc -w"
   },
   "main": "dist/index.js",
