@@ -1,4 +1,4 @@
-import { BaseQueryParamOptions } from "@/constants/types";
+import { QueryParamOptions } from "@repo/types";
 import HttpClient from "./http-client";
 
 export interface PaginatorInfo<T> {
@@ -9,7 +9,7 @@ export interface PaginatorInfo<T> {
 export function crudFactory<
   Type,
   InputData = {},
-  QueryParams = BaseQueryParamOptions,
+  QueryParams = QueryParamOptions,
 >(endpoint: string) {
   return {
     all(params?: QueryParams) {
