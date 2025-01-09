@@ -6,6 +6,9 @@
     "./tailwind.config": "./tailwind.config.ts",
     "./global.css": "./global.css"
   },
+  "scripts": {
+    "clean": "rm -rf node_modules"
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
   },
