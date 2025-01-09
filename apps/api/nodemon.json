@@ -6,5 +6,5 @@
     "*"
   ],
   "ext": "js,ts,json",
-  "exec": "ts-node --require tsconfig-paths/register src/main.ts"
+  "exec": "ts-node -r dotenv/config --require tsconfig-paths/register src/main.ts"
 }
