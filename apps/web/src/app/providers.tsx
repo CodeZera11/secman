@@ -1,9 +1,12 @@
 import ReactQueryProvider from "@/providers/react-query-provider";
+import { SessionProvider } from "next-auth/react";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ReactQueryProvider>
-      {children}
-    </ReactQueryProvider>
+    <SessionProvider>
+      <ReactQueryProvider>
+        {children}
+      </ReactQueryProvider>
+    </SessionProvider>
   )
 }
