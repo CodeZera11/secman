@@ -6,8 +6,31 @@ import { saltAndHashPassword } from "@repo/utils";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import authConfig from "auth.config";
+import { getUserById } from "@/actions/user";
 
 const nextAuth = NextAuth({
+  callbacks: {
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
+
+      token.role = existingUser.role;
+
+      return token;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+
+      if (token.role && session.user) {
+        session.user.role = token.role;
+      }
+      return session;
+    },
+  },
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   ...authConfig,
