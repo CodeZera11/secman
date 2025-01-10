@@ -1,10 +1,10 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateCredentialsUserRequest, CreateCredentialsUserSchema } from "@repo/types"
+import { type CreateCredentialsUserRequest, CreateCredentialsUserSchema } from "@repo/types"
 import { useForm } from "react-hook-form"
 import { Form } from "@repo/ui/components/ui/form"
-import { Button } from "@repo/ui/components/ui/button"
+import InputElement from "@repo/ui/form-elements/input-element"
 
 const RegisterForm = () => {
 
@@ -22,8 +22,20 @@ const RegisterForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <InputElement
+          label="Name"
+          name="name"
+        />
+        <InputElement
+          label="Email"
+          name="email"
+        />
+        <InputElement
+          label="Password"
+          name="password"
+          type="password"
+        />
       </form>
     </Form>
   )
