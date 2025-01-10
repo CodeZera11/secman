@@ -1,9 +1,9 @@
 
 const HomePage = () => {
   return (
-    <div className="h-screen flex items-center justify-center">
+    <main className="h-full flex flex-col items-center justify-center blue-gradient">
       This is the home page
-    </div>
+    </main>
   )
 }
 
