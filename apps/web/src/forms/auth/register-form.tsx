@@ -26,6 +26,8 @@ const RegisterForm = () => {
   })
 
   const onSubmit = async (values: CreateCredentialsUserRequest) => {
+    setError("");
+    setSuccess("");
     startTransition(() => {
       register(values).then((res) => {
         if (res.success) {
@@ -35,7 +37,7 @@ const RegisterForm = () => {
           setError(res.error)
         }
       })
-    })
+    });
   }
 
   return (

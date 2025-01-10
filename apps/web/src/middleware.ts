@@ -1,26 +1,40 @@
-// export { auth as middleware } from "@/auth";
+import NextAuth from "next-auth";
+import authConfig from "auth.config";
+import {
+  apiAuthPrefix,
+  authRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+  publicRoutes,
+} from "./constants/page-routes";
 
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { auth } from "auth";
+const { auth } = NextAuth(authConfig);
 
-const protectedRoutes = ["/middleware"];
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
 
-export default async function middleware(request: NextRequest) {
-  const session = await auth();
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  const isProtected = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
+  if (isApiAuthRoute) return;
 
-  if (!session && isProtected) {
-    const absoluteURL = new URL("/", request.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL.toString());
+  if (isAuthRoute) {
+    if (isLoggedIn)
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    return;
   }
 
-  return NextResponse.next();
-}
+  if (!isLoggedIn && !isPublicRoute)
+    return Response.redirect(new URL("/auth/login", nextUrl));
+
+  return;
+});
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
+  ],
 };
