@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
-  type CreateUserRequest,
-  CreateUserRequestDtoSchema,
+  type CreateCredentialsUserRequest,
+  CreateCredentialsUserSchema
 } from '@repo/types';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 
@@ -19,8 +19,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(CreateUserRequestDtoSchema))
-  create(@Body() createUserRequest: CreateUserRequest) {
+  @UsePipes(new ZodValidationPipe(CreateCredentialsUserSchema))
+  create(@Body() createUserRequest: CreateCredentialsUserRequest) {
     return this.usersService.create(createUserRequest);
   }
 

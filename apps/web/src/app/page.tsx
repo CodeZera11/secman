@@ -1,25 +1,10 @@
-import Logout from "@/components/logout";
-import Navbar from "@/components/navbar";
-import UserContainer from "@/components/user-container"
-import { usersClient } from "@/data/clients/usersClient";
-import queryClient from "@/lib/server-query.client";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-const HomePage = async () => {
-  await queryClient.prefetchQuery({
-    queryKey: ["users"],
-    queryFn: () => usersClient.all(),
-  })
-
+const HomePage = () => {
   return (
-    <div>
-      <Navbar />
-      <Logout />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <UserContainer />
-      </HydrationBoundary>
+    <div className="h-screen flex items-center justify-center">
+      This is the home page
     </div>
   )
 }
 
-export default HomePage;
+export default HomePage

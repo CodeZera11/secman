@@ -3,3 +3,9 @@ export interface QueryParamOptions {
   limit?: number;
   search?: string;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
