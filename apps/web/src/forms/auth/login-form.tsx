@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type CreateCredentialsUserRequest, CreateCredentialsUserSchema } from "@repo/types"
+import { AuthenticateUserRequest, AuthenticateUserSchema } from "@repo/types"
 import { useForm } from "react-hook-form"
 import { Form } from "@repo/ui/components/ui/form"
 import InputElement from "@repo/ui/form-elements/input-element"
@@ -9,25 +9,25 @@ import { Button } from "@repo/ui/components/ui/button"
 import FormError from "@/components/common/form-error"
 import FormSuccess from "@/components/common/form-success"
 import { useState, useTransition } from "react"
-import { register } from "@/actions/register"
+import { login } from "@/actions/login"
 
-const RegisterForm = () => {
+const LoginForm = () => {
 
-  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
-  const form = useForm<CreateCredentialsUserRequest>({
-    resolver: zodResolver(CreateCredentialsUserSchema),
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<AuthenticateUserRequest>({
+    resolver: zodResolver(AuthenticateUserSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     }
   })
 
-  const onSubmit = async (values: CreateCredentialsUserRequest) => {
+  const onSubmit = async (values: AuthenticateUserRequest) => {
     startTransition(() => {
-      register(values).then((res) => {
+      login(values).then((res) => {
         if (res.success) {
           setSuccess(res.success)
           form.reset()
@@ -43,33 +43,27 @@ const RegisterForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <InputElement
-            label="Name"
-            name="name"
-            placeholder="John Doe"
-            disabled={isPending}
-          />
-          <InputElement
             label="Email"
             name="email"
-            placeholder="johndoe@gmail.com"
             disabled={isPending}
+            placeholder="johndoe@gmail.com"
           />
           <InputElement
             label="Password"
             name="password"
             type="password"
-            placeholder="********"
             disabled={isPending}
+            placeholder="********"
           />
         </div>
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" disabled={isPending} className="w-full" size="lg">
-          Register
+          Login
         </Button>
       </form>
     </Form>
   )
 }
 
-export default RegisterForm
+export default LoginForm
