@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { type CreateUserRequest } from '@repo/types';
+import { type CreateCredentialsUserRequest } from '@repo/types';
 import { prisma } from '@repo/db';
 
 @Injectable()
 export class UsersService {
-  async create(data: CreateUserRequest) {
+  async create(data: CreateCredentialsUserRequest) {
     const user = await prisma.user.create({
       data: {
         email: data.email,
