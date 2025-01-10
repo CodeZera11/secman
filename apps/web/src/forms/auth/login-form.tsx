@@ -26,6 +26,8 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (values: AuthenticateUserRequest) => {
+    setError("");
+    setSuccess("");
     startTransition(() => {
       login(values).then((res) => {
         if (res.success) {
