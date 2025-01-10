@@ -6,6 +6,7 @@ const RegisterPage = () => {
   return (
     <CardWrapper
       headerLabel="Register"
+      subHeaderLabel="Create an account"
       backButtonLabel="Back to login"
       backButtonHref={PageRoutes.AUTH.LOGIN}
       showSocials

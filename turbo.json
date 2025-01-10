@@ -44,6 +44,9 @@
     "db:migrate": {
       "cache": false
     },
+    "db:studio": {
+      "cache": false
+    },
     "start": {
       "dependsOn": [
         "^start"
