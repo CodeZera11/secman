@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "auth";
+import { signIn, signOut } from "@/auth";
 import { prisma } from "@repo/db";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";

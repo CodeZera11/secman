@@ -1,4 +1,4 @@
-import { validatedEnv } from "@/lib/env.config";
+import { validatedEnv } from "@/lib/env.client";
 
 export const BASE_API_URL = validatedEnv.NEXT_PUBLIC_BASE_API_URL;
 

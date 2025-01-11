@@ -1,5 +1,5 @@
 import { QueryParamOptions } from "@repo/types";
-import HttpClient from "./http-client";
+import HttpClient from "./http.client";
 
 export interface PaginatorInfo<T> {
   data: T[];

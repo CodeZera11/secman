@@ -1,2 +1,3 @@
-export * from "./lib/zod-parser";
-export * from "./lib/password-hasher";
+export * from "./main/zod-parser";
+export * from "./main/password-hasher";
+export * from "./main/tokens";

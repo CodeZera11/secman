@@ -1,5 +1,5 @@
 import { Button } from '@repo/ui/components/ui/button';
-import { auth, signOut } from 'auth'
+import { auth, signOut } from '@/auth'
 
 const DashboardPage = async () => {
 

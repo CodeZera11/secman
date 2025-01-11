@@ -1,40 +1,48 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { AuthenticateUserRequest, AuthenticateUserSchema } from "@repo/types"
+import { ResetPasswordRequest, ResetPasswordSchema } from "@repo/types"
+import FormSuccess from "@/components/common/form-success"
 import { useForm } from "react-hook-form"
 import { Form } from "@repo/ui/components/ui/form"
 import InputElement from "@repo/ui/form-elements/input-element"
 import { Button } from "@repo/ui/components/ui/button"
 import FormError from "@/components/common/form-error"
-import FormSuccess from "@/components/common/form-success"
-import { useState, useTransition } from "react"
-import { login } from "@/actions/login"
+import { useEffect, useState, useTransition } from "react"
 import { useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { PageRoutes } from "@/constants/page-routes"
+import { resetPassword } from "@/actions/reset-password"
 
-const LoginForm = () => {
-
-  const searchParams = useSearchParams();
-  const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use with different provider!" : ""
+const ResetPasswordForm = () => {
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<AuthenticateUserRequest>({
-    resolver: zodResolver(AuthenticateUserSchema),
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  const form = useForm<ResetPasswordRequest>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      email: "",
       password: "",
     }
   })
 
-  const onSubmit = async (values: AuthenticateUserRequest) => {
+  useEffect(() => {
+    if (token) {
+      form.setValue("token", token)
+    }
+  }, [token])
+
+  const onSubmit = async (values: ResetPasswordRequest) => {
     setError("");
     setSuccess("");
+
+    if (!values.token) {
+      setError("Token not found!")
+      return
+    }
     startTransition(() => {
-      login(values).then((data) => {
+      resetPassword(values).then(data => {
         setError(data?.error);
         setSuccess(data?.success);
       })
@@ -46,32 +54,21 @@ const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <InputElement
-            label="Email"
-            name="email"
-            disabled={isPending}
-            placeholder="johndoe@gmail.com"
-          />
-          <InputElement
             label="Password"
             name="password"
             type="password"
             disabled={isPending}
             placeholder="********"
           />
-          <Button variant="link" size="sm" className="px-0 h-fit" asChild>
-            <Link href={PageRoutes.AUTH.FORGOT_PASSWORD}>
-              Forgot Password?
-            </Link>
-          </Button>
         </div>
-        <FormError message={error || urlError} />
+        <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" disabled={isPending} className="w-full" size="lg">
-          Login
+          Reset Password
         </Button>
       </form>
     </Form>
   )
 }
 
-export default LoginForm
+export default ResetPasswordForm
