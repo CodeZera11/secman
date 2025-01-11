@@ -1,12 +1,23 @@
+import type { Provider } from "next-auth/providers";
 import GitHub from "next-auth/providers/github";
-import type { NextAuthConfig } from "next-auth";
+import { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthenticateUserSchema } from "@repo/types";
 import { getUserByEmail } from "@/actions/user";
 import * as bcrypt from "bcryptjs";
+import Google from "next-auth/providers/google";
+import { validatedEnv } from "./lib/env.client";
 
-export default {
+const authConfig: { providers: Provider[] } = {
   providers: [
+    Google({
+      clientId: validatedEnv.GOOGLE_CLIENT_ID,
+      clientSecret: validatedEnv.GOOGLE_CLIENT_SECRET,
+    }),
+    GitHub({
+      clientId: validatedEnv.GITHUB_CLIENT_ID,
+      clientSecret: validatedEnv.GITHUB_CLIENT_SECRET,
+    }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -30,6 +41,7 @@ export default {
         return user;
       },
     }),
-    GitHub,
   ],
 } satisfies NextAuthConfig;
+
+export default authConfig;

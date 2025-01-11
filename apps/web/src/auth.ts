@@ -1,15 +1,39 @@
-import bcrypt from "bcryptjs";
 import NextAuth, { NextAuthResult } from "next-auth";
 import { prisma } from "@repo/db";
-import Github from "next-auth/providers/github";
-import { saltAndHashPassword } from "@repo/utils";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import Credentials from "next-auth/providers/credentials";
-import authConfig from "auth.config";
+import authConfig from "@/auth.config";
 import { getUserById } from "@/actions/user";
+import { PageRoutes } from "./constants/page-routes";
 
 const nextAuth = NextAuth({
+  pages: {
+    signIn: PageRoutes.AUTH.LOGIN,
+    error: PageRoutes.AUTH.ERROR,
+  },
+  events: {
+    async linkAccount({ user }) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
+      if (!user?.id) return false;
+
+      const existingUser = await getUserById(user.id);
+      
+      // Prevent signin without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      // TODO: Add 2FA check
+
+      return true;
+    },
     async jwt({ token }) {
       if (!token.sub) return token;
 

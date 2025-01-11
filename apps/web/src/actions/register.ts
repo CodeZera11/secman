@@ -7,6 +7,9 @@ import {
 } from "@repo/types";
 import * as bcrypt from "bcryptjs";
 import { getUserByEmail } from "./user";
+import { generateVerificationToken } from "@repo/utils";
+import { sendEmail } from "@repo/lib";
+import { sendVerificationEmail } from "@/utils/email";
 
 export const register = async (values: CreateCredentialsUserRequest) => {
   const valitedFields = CreateCredentialsUserSchema.safeParse(values);
@@ -23,7 +26,7 @@ export const register = async (values: CreateCredentialsUserRequest) => {
   if (existingUser) {
     return { error: "Email already in use!" };
   }
-  console.log("creating suer");
+  console.log("creating user");
 
   await prisma.user.create({
     data: {
@@ -33,7 +36,9 @@ export const register = async (values: CreateCredentialsUserRequest) => {
     },
   });
 
-  //  TODO: SEND VERIFICATION EMAIL
+  const verificationToken = await generateVerificationToken(email);
 
-  return { success: "User created successfully!" };
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  return { success: "Confirmation email sent!" };
 };

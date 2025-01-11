@@ -1,4 +1,4 @@
-import CardWrapper from "@/components/auth/card-wrapper"
+import CardWrapper from "@/components/common/card-wrapper"
 import { PageRoutes } from "@/constants/page-routes"
 import LoginForm from "@/forms/auth/login-form"
 
