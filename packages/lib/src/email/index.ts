@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import transporter from "./transporter";
-import { validatedEnv } from "./env";
+import { validatedEnv } from "./env.config";
 
 interface SendEmailRequest {
   emailTo: string | string[];

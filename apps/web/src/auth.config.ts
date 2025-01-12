@@ -6,7 +6,7 @@ import { AuthenticateUserSchema } from "@repo/types";
 import { getUserByEmail } from "@/actions/user";
 import * as bcrypt from "bcryptjs";
 import Google from "next-auth/providers/google";
-import { validatedEnv } from "./lib/env.client";
+import { validatedEnv } from "./lib/env.config";
 
 const authConfig: { providers: Provider[] } = {
   providers: [

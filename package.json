@@ -1,5 +1,5 @@
 {
-  "name": "ezifind",
+  "name": "web-toolbox",
   "private": true,
   "scripts": {
     "build": "turbo build",

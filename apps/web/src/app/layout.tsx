@@ -3,8 +3,8 @@ import Providers from "./providers";
 import "@repo/tailwind-config/global.css";
 
 export const metadata: Metadata = {
-  title: "Ezifind",
-  description: "Luxury property finder",
+  title: "Web Toolbox",
+  description: "A collection of tools for web development",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-      className="h-screen"
+      className="h-screen bg-neutral-900"
       >
         <Providers>
           {children}
