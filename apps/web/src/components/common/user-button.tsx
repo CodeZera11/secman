@@ -35,14 +35,19 @@ const dropdownItems = [
   },
 ]
 
-export function UserButton() {
-  const data = useCurrentUser();
+interface UserButtonProps {
+  user?: User
+}
 
-  const [open, setOpen] = useState(false);
-  const user = data?.user as User | undefined;
-  const isLoading = data?.isLoading;
 
-  if (!user && !isLoading) {
+const UserButton: React.FC<UserButtonProps> = ({ user }) => {
+  // const data = useCurrentUser();
+
+  // const [open, setOpen] = useState(false);
+  // const user = data?.user as User | undefined;
+  // const isLoading = data?.isLoading;
+
+  if (!user) {
     return (
       <Button variant="secondary" asChild>
         <Link href={PageRoutes.AUTH.LOGIN}>
@@ -53,21 +58,16 @@ export function UserButton() {
   }
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {isLoading ? (
-          <Skeleton className="h-8 w-8 rounded-full bg-neutral-700" />
-        ) : (
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
-              <AvatarFallback>
-                <BiUser className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-          </Button>
-        )}
-
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
+            <AvatarFallback>
+              <BiUser className="h-4 w-4" />
+            </AvatarFallback>
+          </Avatar>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent darkMode align="end" forceMount>
         <DropdownMenuItem className="flex flex-col items-start gap-0 px-3 py-2.5 focus:bg-neutral-800 focus:text-white rounded-md">
@@ -99,3 +99,4 @@ export function UserButton() {
   )
 }
 
+export default UserButton;
