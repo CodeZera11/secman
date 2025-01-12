@@ -1,15 +1,8 @@
-"use client"
+import { auth } from "@/auth";
+import UserButton from "../common/user-button"
 
-import { useState } from 'react'
-import { LandingPageSections } from './constants';
-import { UserButton } from '../common/user-button';
-
-const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+const Navbar = async () => {
+  const session = await auth();
 
   return (
     <section id="navbar" className="fixed w-full z-50">
@@ -35,49 +28,11 @@ const Navbar = () => {
                   )
                 )} */}
 
-                <UserButton />
+                <UserButton user={session?.user} />
               </div>
-            </div>
-            <div className="md:hidden">
-              <button
-                type="button"
-                onClick={toggleMobileMenu}
-                className="hamburger inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-neutral-800 focus:outline-none"
-                aria-controls="mobile-menu"
-                aria-expanded={mobileMenuOpen}
-              >
-                <span className="sr-only">Open main menu</span>
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
-        {mobileMenuOpen && (
-          <div className="mobile-menu md:hidden px-2 pt-2 pb-3 space-y-1 bg-neutral-900/90 backdrop-blur-sm">
-            {['Features', 'How It Works', 'Properties', 'Pricing', 'Testimonials', 'FAQ', 'Contact'].map(
-              (section) => (
-                <a
-                  key={section}
-                  href={`#${section.toLowerCase().replace(/\s+/g, '')}`}
-                  className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  {section}
-                </a>
-              )
-            )}
-            <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition duration-300 mt-4">
-              Sign In
-            </button>
-          </div>
-        )}
       </nav>
     </section>
   )
