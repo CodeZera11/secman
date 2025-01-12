@@ -2,10 +2,6 @@
 
 import { useState } from 'react'
 import { LandingPageSections } from './constants';
-import { Button } from '@repo/ui/components/ui/button';
-import Link from 'next/link';
-import { PageRoutes } from '@/constants/page-routes';
-import { useCurrentUser } from '@/hooks/user';
 import { UserButton } from '../common/user-button';
 
 const Navbar = () => {
@@ -17,17 +13,17 @@ const Navbar = () => {
 
   return (
     <section id="navbar" className="fixed w-full z-50">
-      <nav className="bg-neutral-900/90 backdrop-blur-sm">
+      <nav className="primary-gradient backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex-shrink-0">
               <a href="#hero" className="text-white font-bold text-xl">
-                EziFind
+                Web Toolbox
               </a>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-4">
-                {LandingPageSections.map(
+                {/* {LandingPageSections.map(
                   (section) => (
                     <a
                       key={section}
@@ -37,7 +33,7 @@ const Navbar = () => {
                       {section}
                     </a>
                   )
-                )}
+                )} */}
 
                 <UserButton />
               </div>
