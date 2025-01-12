@@ -1,19 +1,12 @@
-import { PageRoutes } from "@/constants/page-routes"
-import { Button } from "@repo/ui/components/ui/button"
-import Link from "next/link"
+import HeroSection from "@/components/landing-page/hero-section";
+import Navbar from "@/components/landing-page/navbar";
 
 const HomePage = () => {
   return (
-    <main className="h-full flex flex-col items-center justify-center gap-5 blue-gradient">
-      <h1 className="text-6xl font-bold  text-white">
-        EZIFIND
-      </h1>
-      <Button size="lg" variant="secondary" asChild>
-        <Link href={PageRoutes.AUTH.LOGIN}>
-          Sign In
-        </Link>
-      </Button>
-    </main>
+    <div id="root" className="h-full">
+      <Navbar />
+      <HeroSection />
+    </div>
   )
 }
 

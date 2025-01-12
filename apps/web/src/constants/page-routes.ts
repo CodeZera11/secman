@@ -10,6 +10,9 @@ export const PageRoutes = {
     FORGOT_PASSWORD: "/auth/forgot-password",
     RESET_PASSWORD: "/auth/reset-password",
   },
+  PROTECTED: {
+    DASHBOARD: "/dashboard",
+  }
 };
 
 /**
