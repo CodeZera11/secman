@@ -4,7 +4,7 @@ import ora from "ora";
 import { logger } from "../utils/logger.js";
 
 const spinner = ora({
-  text: "Loading...",
+  // text: "Loading...",
   color: "yellow",
 });
 
