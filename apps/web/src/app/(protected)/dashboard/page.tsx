@@ -3,14 +3,19 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { PageRoutes } from '@/constants/page-routes';
 import UserButton from '@/components/common/user-button';
+import { getAuthToken } from '@/actions/token';
 
 const DashboardPage = async () => {
 
   const session = await auth();
 
+  const token = await getAuthToken()
+
   if (!session?.user) {
     redirect(PageRoutes.AUTH.LOGIN);
   }
+
+
 
   return (
     <div className='flex flex-col h-full'>
@@ -19,6 +24,7 @@ const DashboardPage = async () => {
           Secman
         </Link>
         <UserButton user={session?.user} />
+        {token.data}
       </nav>
     </div>
   )

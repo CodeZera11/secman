@@ -1,6 +1,6 @@
 import { ZodSchema } from 'zod';
-import { BadRequestException, PipeTransform } from '@nestjs/common';
 import { ProtectedEndPointBaseSchema } from '@repo/types';
+import { BadRequestException, PipeTransform } from '@nestjs/common';
 
 export class ZodValidationPipe implements PipeTransform {
   constructor(

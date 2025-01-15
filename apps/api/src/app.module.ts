@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { UsersModule } from './users/users.module';
-import { ProjectsModule } from './projects/projects.module';
+import { UsersModule } from './domains/users/users.module';
+import { ProjectsModule } from './domains/projects/projects.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from 'interceptors/logging.interceptor';
-import { TransformInterceptor } from 'interceptors/transform.interceptor';
-import { ErrorInterceptor } from 'interceptors/errors.interceptor';
+import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
+import { ErrorInterceptor } from 'src/interceptors/errors.interceptor';
+import { HttpRequestBodyInterceptor } from './interceptors/http-request-body.interceptor';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { ErrorInterceptor } from 'interceptors/errors.interceptor';
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpRequestBodyInterceptor,
     },
   ],
 })

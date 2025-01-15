@@ -10,9 +10,9 @@ import {
 import { UsersService } from './users.service';
 import {
   type CreateCredentialsUserRequest,
-  CreateCredentialsUserSchema
+  CreateCredentialsUserSchema,
 } from '@repo/types';
-import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
+import { ZodValidationPipe } from '../../../pipes/zod-validation.pipe';
 
 @Controller('users')
 export class UsersController {

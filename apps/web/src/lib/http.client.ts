@@ -1,3 +1,4 @@
+import { getAuthToken } from "@/actions/token";
 import { BASE_API_URL } from "@/constants/api";
 import axios from "axios";
 
@@ -7,6 +8,12 @@ const axiosClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+});
+
+axiosClient.interceptors.request.use(async (request: any) => {
+  const token = (await getAuthToken()).data;
+  request.headers.Authorization = `Bearer ${token}`;
+  return request;
 });
 
 axiosClient.interceptors.response.use((response: any) => {

@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '@repo/db';
-import { CreateProjectRequest } from '@repo/types';
+import { type ProtectedEndPointBaseRequest } from '@repo/types';
+import { type CreateProjectRequestDto } from './dto';
 
 @Injectable()
 export class ProjectsService {
-  async create(data: CreateProjectRequest) {
+  async create(data: CreateProjectRequestDto) {
     const project = await prisma.project.create({
       data: {
         name: data.name,
-        userId: 'cm5trigq50000h3d0rudawymu',
+        userId: data.user_id,
       },
     });
 
@@ -25,10 +26,10 @@ export class ProjectsService {
     return project;
   }
 
-  async findAll() {
+  async findAll(baseRequest: ProtectedEndPointBaseRequest) {
     const projects = await prisma.project.findMany({
       where: {
-        userId: 'cm5trigq50000h3d0rudawymu',
+        userId: baseRequest.user_id,
       },
     });
 

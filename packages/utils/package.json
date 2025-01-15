@@ -24,6 +24,8 @@
     "typescript": "5.1.3"
   },
   "dependencies": {
+    "@panva/hkdf": "^1.2.1",
+    "jose": "^5.9.6",
     "uuid": "^11.0.5"
   }
 }
