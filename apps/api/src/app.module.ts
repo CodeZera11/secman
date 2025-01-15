@@ -7,7 +7,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { ErrorInterceptor } from 'src/interceptors/errors.interceptor';
-import { HttpRequestBodyInterceptor } from './interceptors/http-request-body.interceptor';
+import { SecretsModule } from './domains/secrets/secrets.module';
 
 @Module({
   imports: [
@@ -16,6 +16,7 @@ import { HttpRequestBodyInterceptor } from './interceptors/http-request-body.int
     }),
     UsersModule,
     ProjectsModule,
+    SecretsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -30,10 +31,6 @@ import { HttpRequestBodyInterceptor } from './interceptors/http-request-body.int
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: HttpRequestBodyInterceptor,
     },
   ],
 })

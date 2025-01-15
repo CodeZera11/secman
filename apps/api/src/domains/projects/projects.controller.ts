@@ -13,10 +13,10 @@ import {
   type ProtectedEndPointBaseRequest,
   ProtectedEndPointBaseSchema,
 } from '@repo/types';
-import { ZodValidationPipe } from 'pipes/zod-validation.pipe';
 import { ResponseMessage } from 'src/decorators/response-message.decorator';
-import { type CreateProjectRequestDto } from './dto';
+import { type CreateProjectRequestDto } from './dto/create-project.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 
 @Controller('projects')
 export class ProjectsController {

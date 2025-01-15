@@ -25,6 +25,10 @@ export class HttpRequestBodyInterceptor implements NestInterceptor {
         validatedEnv.NODE_ENV === NODE_ENV_ENUM.DEVELOPMENT,
       );
       if (payload) {
+        request.user = {
+          user_id: payload.sub,
+          user_name: payload.name,
+        };
         request.body['user_id'] = payload.sub;
         request.body['user_name'] = payload.name;
       }

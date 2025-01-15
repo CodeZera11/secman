@@ -7,6 +7,7 @@ export class ZodValidationPipe implements PipeTransform {
     private schema: ZodSchema,
     private options?: {
       protected?: boolean;
+      query?: boolean;
     },
   ) {}
 

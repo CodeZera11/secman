@@ -27,6 +27,10 @@ export async function validateRequest(request: any): Promise<boolean> {
       validatedEnv.NODE_ENV === NODE_ENV_ENUM.DEVELOPMENT,
     );
     if (!payload) return false;
+    request.user = {
+      user_id: payload.sub,
+      user_name: payload.name,
+    };
   } catch (error) {
     console.error('Error validating token', error);
     return false;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '@repo/db';
 import { type ProtectedEndPointBaseRequest } from '@repo/types';
-import { type CreateProjectRequestDto } from './dto';
+import { type CreateProjectRequestDto } from './dto/create-project.dto';
 
 @Injectable()
 export class ProjectsService {

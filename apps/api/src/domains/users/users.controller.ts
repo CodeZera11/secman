@@ -12,7 +12,7 @@ import {
   type CreateCredentialsUserRequest,
   CreateCredentialsUserSchema,
 } from '@repo/types';
-import { ZodValidationPipe } from '../../../pipes/zod-validation.pipe';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 
 @Controller('users')
 export class UsersController {
