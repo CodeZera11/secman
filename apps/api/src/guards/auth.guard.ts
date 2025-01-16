@@ -31,6 +31,8 @@ export async function validateRequest(request: any): Promise<boolean> {
       user_id: payload.sub,
       user_name: payload.name,
     };
+    console.log({ payload });
+    console.log({ user: request.user });
   } catch (error) {
     console.error('Error validating token', error);
     return false;

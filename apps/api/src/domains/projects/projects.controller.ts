@@ -11,12 +11,12 @@ import { ProjectsService } from './projects.service';
 import {
   CreateProjectSchema,
   type ProtectedEndPointBaseRequest,
-  ProtectedEndPointBaseSchema,
 } from '@repo/types';
 import { ResponseMessage } from 'src/decorators/response-message.decorator';
 import { type CreateProjectRequestDto } from './dto/create-project.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
 
 @Controller('projects')
 export class ProjectsController {
@@ -31,13 +31,10 @@ export class ProjectsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   @ResponseMessage('Fetched projects successfully!')
-  // @UsePipes(
-  //   new ZodValidationPipe(ProtectedEndPointBaseSchema, { protected: true }),
-  // )
-  // findAll(@Body() baseRequest: ProtectedEndPointBaseRequest) {
-  findAll() {
-    return this.projectsService.findAll();
+  findAll(@CurrentUser() user: ProtectedEndPointBaseRequest) {
+    return this.projectsService.findAll(user);
   }
 
   @Get(':id')

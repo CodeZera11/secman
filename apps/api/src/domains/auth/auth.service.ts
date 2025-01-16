@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { prisma } from '@repo/db';
 import * as bcrypt from 'bcryptjs';
 import { encode } from '../../utils/encode';
@@ -40,14 +35,14 @@ export class AuthService {
             ? '__Secure-authjs.session-token'
             : 'authjs.session-token',
         secret: validatedEnv.AUTH_SECRET,
+        token: {
+          email: existingUser.email,
+          sub: existingUser.id,
+          name: existingUser.name,
+        },
       });
 
       return { token };
-
-      // return {
-      //   access_token: account.access_token,
-      //   refresh_token: account.refresh_token,
-      // };
     } catch (error) {
       console.log({ error });
       return { message: 'An error occurred', error: true };
