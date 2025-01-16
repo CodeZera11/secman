@@ -32,11 +32,12 @@ export class ProjectsController {
 
   @Get()
   @ResponseMessage('Fetched projects successfully!')
-  @UsePipes(
-    new ZodValidationPipe(ProtectedEndPointBaseSchema, { protected: true }),
-  )
-  findAll(@Body() baseRequest: ProtectedEndPointBaseRequest) {
-    return this.projectsService.findAll(baseRequest);
+  // @UsePipes(
+  //   new ZodValidationPipe(ProtectedEndPointBaseSchema, { protected: true }),
+  // )
+  // findAll(@Body() baseRequest: ProtectedEndPointBaseRequest) {
+  findAll() {
+    return this.projectsService.findAll();
   }
 
   @Get(':id')

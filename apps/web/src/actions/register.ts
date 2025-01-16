@@ -22,11 +22,11 @@ export const register = async (values: CreateCredentialsUserRequest) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const existingUser = await getUserByEmail(email);
+  console.log({ existingUser });
 
   if (existingUser) {
     return { error: "Email already in use!" };
   }
-  console.log("creating user");
 
   await prisma.user.create({
     data: {

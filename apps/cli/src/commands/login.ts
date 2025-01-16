@@ -3,6 +3,8 @@ import { Command } from "commander";
 import ora from "ora";
 import { logger } from "../utils/logger.js";
 import readLineSync from "readline-sync";
+import axios from "axios";
+import { saveTokens } from "../utils/auth.js";
 
 const spinner = ora({
   // text: "Loading...",
@@ -40,6 +42,8 @@ export async function runLogin() {
     return;
   }
 
+  console.log({ password });
+
   logger.info(`Executing ${chalk.bold("login")} command`);
   if (!email) {
     spinner.fail("Email is required");
@@ -48,21 +52,19 @@ export async function runLogin() {
     spinner.fail("Password is required");
   }
   spinner.start();
-
-  const response = await fetch("http://localhost:4000/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
+  const response = await axios.post("http://localhost:4000/auth/login", {
+    email,
+    password,
   });
-  const data = await response.json();
 
-  console.log({ data });
-
-  if (response.ok) {
-    spinner.succeed("Login successful");
-  } else {
-    spinner.fail(data.message);
+  const error = response.data.data.error;
+  if (error) {
+    spinner.fail("Login failed");
+    console.log({ error });
+    return;
   }
+
+  const { token } = response.data.data;
+  saveTokens({ token });
+  spinner.succeed("Login successful");
 }

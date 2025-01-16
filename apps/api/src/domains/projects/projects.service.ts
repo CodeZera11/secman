@@ -26,11 +26,11 @@ export class ProjectsService {
     return project;
   }
 
-  async findAll(baseRequest: ProtectedEndPointBaseRequest) {
+  async findAll() {
     const projects = await prisma.project.findMany({
-      where: {
-        userId: baseRequest.user_id,
-      },
+      // where: {
+      //   userId: baseRequest.user_id,
+      // },
     });
 
     return projects;
