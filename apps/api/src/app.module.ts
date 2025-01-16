@@ -8,6 +8,7 @@ import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { ErrorInterceptor } from 'src/interceptors/errors.interceptor';
 import { SecretsModule } from './domains/secrets/secrets.module';
+import { AuthModule } from './domains/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SecretsModule } from './domains/secrets/secrets.module';
     UsersModule,
     ProjectsModule,
     SecretsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
