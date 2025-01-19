@@ -2,12 +2,13 @@
 
 import { deleteProject } from '@/actions/projects'
 import CreateProjectDialog from '@/components/dialogs/create-project-dialog'
+import EditProjectDialog from '@/components/dialogs/edit-project-dialog'
 import { Project } from '@/constants/types'
 import { Button } from '@repo/ui/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@repo/ui/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@repo/ui/components/ui/card'
 import { useTransition } from 'react'
-import { BiEdit } from 'react-icons/bi'
 import { BsEye, BsTrash2 } from 'react-icons/bs'
+import { format } from "date-fns"
 
 interface ProjectsContainerProps {
   projects: Project[]
@@ -36,7 +37,8 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {projects.map(({ id, name, secrets, createdAt, updatedAt }) => {
+        {projects.map((project) => {
+          const { id, name, secrets, createdAt, updatedAt } = project;
           const secretsCount = secrets.length;
           return (
             <Card key={id} className="w-full relative hover:shadow-lg transition-shadow duration-300 text-white bg-neutral-800/20 border-neutral-600">
@@ -57,20 +59,12 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
                 <div className="space-y-2">
                   <p className="text-sm ">ID: {id}</p>
                   <p className="text-sm">Number of Secrets: {secretsCount}</p>
-                  <p className="text-sm ">Created: {new Date(createdAt).toLocaleDateString()}</p>
-                  <p className="text-sm ">Updated: {new Date(updatedAt).toLocaleDateString()}</p>
+                  <p className="text-sm ">Created: {format(new Date(createdAt), "dd MMM yyyy, hh:mm a")}</p>
+                  <p className="text-sm ">Updated: {format(new Date(updatedAt), "dd MMM yyyy, hh:mm a")}</p>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="flex items-center space-x-1"
-                // onClick={() => onEdit(id)}
-                >
-                  <BiEdit className="h-4 w-4" />
-                  <span>Edit</span>
-                </Button>
+                <EditProjectDialog project={project} />
                 <Button
                   variant="secondary"
                   size="sm"

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -45,6 +46,17 @@ export class ProjectsController {
   @ResponseMessage('One project fetched successfully')
   findOne(@Param('id') id: string) {
     return this.projectsService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  update(
+    @Param('id') id: string,
+    @CurrentUser('user_id') userId: string,
+    @Body(new ZodValidationPipe(CreateProjectSchema))
+    data: Partial<CreateProjectRequest>,
+  ) {
+    return this.projectsService.update(userId, id, data);
   }
 
   @Delete(':id')

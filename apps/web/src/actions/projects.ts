@@ -61,6 +61,35 @@ export const createProject = async (
   }
 };
 
+export const updateProject = async (
+  id: string,
+  data: Partial<CreateProjectRequest>
+): Promise<ServerResponse<Project> | null> => {
+  try {
+    const token = await getToken();
+    const response = await fetch(`${ApiEndpoints.PROJECTS}/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    revalidateTag("posts");
+
+    const responseData: ServerResponse<Project> = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log({ error });
+    return null;
+  }
+};
+
 export const deleteProject = async (id: string) => {
   try {
     const token = await getToken();

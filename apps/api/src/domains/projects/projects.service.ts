@@ -48,6 +48,44 @@ export class ProjectsService {
     return projects;
   }
 
+  async update(
+    userId: string,
+    id: string,
+    data: Partial<CreateProjectRequest>,
+  ) {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!existingUser) throw new NotFoundException('User not found!');
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!project) throw new NotFoundException('Project not found!');
+
+    const isOwner = project.userId === userId;
+    if (!isOwner)
+      throw new UnauthorizedException(
+        'You are not authorized to delete this project!',
+      );
+
+    console.log('updating...');
+    const updatedProject = await prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name,
+      },
+    });
+
+    return updatedProject;
+  }
+
   async remove(userId: string, id: string) {
     const existingUser = await prisma.user.findUnique({
       where: {
