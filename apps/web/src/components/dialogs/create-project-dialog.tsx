@@ -3,10 +3,14 @@
 import CreateProjectForm from "@/forms/projects/create-project-form"
 import { Button } from "@repo/ui/components/ui/button"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@repo/ui/components/ui/dialog"
+import { useState } from "react"
 
 const CreateProjectDialog = () => {
+
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button variant='secondary' size="lg">
           Create Project
@@ -18,7 +22,7 @@ const CreateProjectDialog = () => {
             Create Project
           </DialogTitle>
         </DialogHeader>
-        <CreateProjectForm />
+        <CreateProjectForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )

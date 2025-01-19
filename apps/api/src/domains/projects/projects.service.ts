@@ -8,7 +8,6 @@ import {
 @Injectable()
 export class ProjectsService {
   async create(userId: string, data: CreateProjectRequest) {
-    console.log('Creating project', data);
     const project = await prisma.project.create({
       data: {
         name: data.name,
@@ -33,6 +32,9 @@ export class ProjectsService {
     const projects = await prisma.project.findMany({
       where: {
         userId: user.user_id,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
       include: {
         secrets: true,

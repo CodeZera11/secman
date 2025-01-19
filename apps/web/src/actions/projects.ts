@@ -1,31 +1,37 @@
 "use server";
 
 import { ApiEndpoints } from "@/constants/api";
-import axios, { AxiosResponse } from "axios";
 import { getAuthToken } from "./token";
 import { Project, ServerResponse } from "@/constants/types";
 import { CreateProjectRequest } from "@repo/types";
+import { revalidateTag } from "next/cache";
 
 export const getProjects = async (): Promise<ServerResponse<
   Project[]
 > | null> => {
   try {
     const token = await getAuthToken();
-
     if (!token) {
       throw new Error("Please login to continue!");
     }
 
-    const response: AxiosResponse<ServerResponse<Project[]>> = await axios.get(
-      ApiEndpoints.PROJECTS,
-      {
-        headers: {
-          Authorization: `Bearer ${token.data}`,
-        },
-      }
-    );
+    const response = await fetch(ApiEndpoints.PROJECTS, {
+      method: "GET",
+      next: {
+        tags: ["projects"],
+      },
+      headers: {
+        Authorization: `Bearer ${token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-    return response.data;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: ServerResponse<Project[]> = await response.json();
+    return data;
   } catch (error) {
     console.log({ error });
     return null;
@@ -37,22 +43,27 @@ export const createProject = async (
 ): Promise<ServerResponse<Project> | null> => {
   try {
     const token = await getAuthToken();
-
     if (!token) {
       throw new Error("Please login to continue!");
     }
 
-    const response: AxiosResponse<ServerResponse<Project>> = await axios.post(
-      ApiEndpoints.PROJECTS,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token.data}`,
-        },
-      }
-    );
+    const response = await fetch(ApiEndpoints.PROJECTS, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token.data}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-    return response.data;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    revalidateTag("posts");
+    const responseData: ServerResponse<Project> = await response.json();
+
+    return responseData;
   } catch (error) {
     console.log({ error });
     return null;

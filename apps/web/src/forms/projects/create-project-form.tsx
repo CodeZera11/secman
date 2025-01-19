@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { AuthenticateUserRequest, AuthenticateUserSchema, CreateProjectRequest, CreateProjectSchema } from "@repo/types"
+import { CreateProjectRequest, CreateProjectSchema } from "@repo/types"
 import { useForm } from "react-hook-form"
 import { Form } from "@repo/ui/components/ui/form"
 import InputElement from "@repo/ui/form-elements/input-element"
@@ -9,13 +9,9 @@ import { Button } from "@repo/ui/components/ui/button"
 import FormError from "@/components/common/form-error"
 import FormSuccess from "@/components/common/form-success"
 import { useState, useTransition } from "react"
-import { login } from "@/actions/login"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { PageRoutes } from "@/constants/page-routes"
 import { createProject } from "@/actions/projects"
 
-const CreateProjectForm = () => {
+const CreateProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
@@ -32,7 +28,9 @@ const CreateProjectForm = () => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      createProject(values)
+      createProject(values).then(() => {
+        onSuccess()
+      })
       // login(values).then((data) => {
       //   setError(data?.error);
       //   setSuccess(data?.success);
