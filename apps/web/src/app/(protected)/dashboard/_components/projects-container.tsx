@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@repo/ui/components/u
 import { useTransition } from 'react'
 import { BsEye, BsTrash2 } from 'react-icons/bs'
 import { format } from "date-fns"
+import { SecretsDialog } from '@/components/dialogs/secrets-dialog'
 
 interface ProjectsContainerProps {
   projects: Project[]
@@ -65,15 +66,7 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
               </CardContent>
               <CardFooter className="flex justify-between">
                 <EditProjectDialog project={project} />
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="flex items-center space-x-1"
-                // onClick={() => onViewSecrets(id)}
-                >
-                  <BsEye className="h-4 w-4" />
-                  <span>See Secrets</span>
-                </Button>
+                <SecretsDialog project={project} />
               </CardFooter>
             </Card>
           )
