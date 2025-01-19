@@ -3,19 +3,22 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { PageRoutes } from '@/constants/page-routes';
 import UserButton from '@/components/common/user-button';
-import { getAuthToken } from '@/actions/token';
+import ProjectsContainer from './_components/projects-container';
+import { getProjects } from '@/actions/projects';
 
 const DashboardPage = async () => {
 
   const session = await auth();
-
-  const token = await getAuthToken()
+  const data = await getProjects();
 
   if (!session?.user) {
     redirect(PageRoutes.AUTH.LOGIN);
   }
 
 
+  if (!data?.data) {
+    return <div>{data?.message}</div>
+  }
 
   return (
     <div className='flex flex-col h-full'>
@@ -24,8 +27,8 @@ const DashboardPage = async () => {
           Secman
         </Link>
         <UserButton user={session?.user} />
-        {token.data}
       </nav>
+      <ProjectsContainer projects={data?.data} />
     </div>
   )
 }

@@ -31,6 +31,9 @@ export class ProjectsService {
       where: {
         userId: user.user_id,
       },
+      include: {
+        secrets: true,
+      },
     });
 
     return projects;

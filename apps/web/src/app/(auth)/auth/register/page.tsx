@@ -9,7 +9,7 @@ const RegisterPage = () => {
       subHeaderLabel="Create an account"
       backButtonLabel="Back to login"
       backButtonHref={PageRoutes.AUTH.LOGIN}
-      showSocials
+      // showSocials
     >
       <RegisterForm />
     </CardWrapper >
