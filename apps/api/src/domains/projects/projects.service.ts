@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '@repo/db';
-import { type ProtectedEndPointBaseRequest } from '@repo/types';
-import { type CreateProjectRequestDto } from './dto/create-project.dto';
+import {
+  CreateProjectRequest,
+  type ProtectedEndPointBaseRequest,
+} from '@repo/types';
 
 @Injectable()
 export class ProjectsService {
-  async create(data: CreateProjectRequestDto) {
+  async create(userId: string, data: CreateProjectRequest) {
+    console.log('Creating project', data);
     const project = await prisma.project.create({
       data: {
         name: data.name,
-        userId: data.user_id,
+        userId: userId,
       },
     });
 

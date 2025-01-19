@@ -1,3 +1,4 @@
+import CreateProjectDialog from '@/components/dialogs/create-project-dialog'
 import { Project } from '@/constants/types'
 import { Button } from '@repo/ui/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card'
@@ -12,9 +13,7 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
     <div className="w-full mx-auto px-10 py-5 space-y-10">
       <div className='flex items-center justify-between gap-5'>
         <h1 className="text-2xl font-bold mb-4">Projects and Secrets</h1>
-        <Button variant='secondary' size="lg">
-          Create Project
-        </Button>
+        <CreateProjectDialog />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {projects.map((project) => (

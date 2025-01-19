@@ -17,8 +17,9 @@ export class ZodValidationPipe implements PipeTransform {
       const authSchema = this.schema.and(ProtectedEndPointBaseSchema);
       this.schema = authSchema;
     }
-    const parsedValue = this.schema.safeParse(value);
 
+    const parsedValue = this.schema.safeParse(value);
+    console.log({ parsedValue, value });
     if (!parsedValue.success) {
       throw new BadRequestException(parsedValue.error.format());
     }

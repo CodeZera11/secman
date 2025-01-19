@@ -1,19 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-  UsePipes,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import {
+  type CreateProjectRequest,
   CreateProjectSchema,
   type ProtectedEndPointBaseRequest,
 } from '@repo/types';
 import { ResponseMessage } from 'src/decorators/response-message.decorator';
-import { type CreateProjectRequestDto } from './dto/create-project.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
@@ -25,9 +17,13 @@ export class ProjectsController {
   @Post()
   @UseGuards(AuthGuard)
   @ResponseMessage('Project created successfully')
-  @UsePipes(new ZodValidationPipe(CreateProjectSchema, { protected: true }))
-  create(@Body() createProjectRequest: CreateProjectRequestDto) {
-    return this.projectsService.create(createProjectRequest);
+  create(
+    @Body(new ZodValidationPipe(CreateProjectSchema))
+    createProjectRequest: CreateProjectRequest,
+    @CurrentUser('user_id') userId: string,
+  ) {
+    console.log({ userId });
+    return this.projectsService.create(userId, createProjectRequest);
   }
 
   @Get()

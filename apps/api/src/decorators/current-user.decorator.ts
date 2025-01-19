@@ -13,6 +13,10 @@ export const CurrentUser = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
     const user = request.user;
     if (!user) throw new NotFoundException('User not found');
+
+    if (key && !(key in user)) {
+      throw new NotFoundException('User property not found in request');
+    }
     return key ? user?.[key] : user;
   },
 );

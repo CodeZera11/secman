@@ -19,7 +19,6 @@ export class AuthService {
         throw new NotFoundException('User not found');
       }
 
-      console.log({ existingUser });
       const passwordMatch = await bcrypt.compare(
         password,
         existingUser.password,
