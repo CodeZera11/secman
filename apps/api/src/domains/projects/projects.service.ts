@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { prisma } from '@repo/db';
 import {
   CreateProjectRequest,
@@ -42,5 +46,37 @@ export class ProjectsService {
     });
 
     return projects;
+  }
+
+  async remove(userId: string, id: string) {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!existingUser) throw new NotFoundException('User not found!');
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!project) throw new NotFoundException('Project not found!');
+
+    const isOwner = project.userId === userId;
+    if (!isOwner)
+      throw new UnauthorizedException(
+        'You are not authorized to delete this project!',
+      );
+
+    console.log('deleting...');
+
+    const deletedProject = await prisma.project.delete({
+      where: {
+        id,
+      },
+    });
+
+    return deletedProject;
   }
 }

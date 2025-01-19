@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import {
   type CreateProjectRequest,
@@ -37,5 +45,11 @@ export class ProjectsController {
   @ResponseMessage('One project fetched successfully')
   findOne(@Param('id') id: string) {
     return this.projectsService.findOne(id);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  remove(@Param('id') id: string, @CurrentUser('user_id') userId: string) {
+    return this.projectsService.remove(userId, id);
   }
 }

@@ -4,7 +4,6 @@ import { AppController } from './app.controller';
 import { UsersModule } from './domains/users/users.module';
 import { ProjectsModule } from './domains/projects/projects.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { ErrorInterceptor } from 'src/interceptors/errors.interceptor';
 import { SecretsModule } from './domains/secrets/secrets.module';
@@ -22,10 +21,6 @@ import { AuthModule } from './domains/auth/auth.module';
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
