@@ -8,7 +8,7 @@ import {
   type CreateSecretRequest,
 } from '@repo/types';
 import { prisma } from '@repo/db';
-import { encryptSecret } from 'src/utils/encryption';
+import { decryptSecret, encryptSecret } from 'src/utils/encryption';
 
 @Injectable()
 export class SecretsService {
@@ -87,14 +87,23 @@ export class SecretsService {
       if (!existingProject) throw new NotFoundException('Project not found');
 
       const ifUserOwnsProject = existingProject.userId === userId;
-
       if (!ifUserOwnsProject) throw new UnauthorizedException();
 
-      return await prisma.secret.findMany({
+      const secrets = await prisma.secret.findMany({
         where: {
           projectId,
         },
       });
+
+      const decryptedSecrets = secrets.map((secret) => ({
+        ...secret,
+        value: decryptSecret({
+          userId: userId,
+          encryptedValue: secret.value,
+        }),
+      }));
+
+      return decryptedSecrets;
     } catch (error) {
       return error;
     }
