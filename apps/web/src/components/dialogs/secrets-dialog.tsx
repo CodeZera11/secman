@@ -46,7 +46,7 @@ export function SecretsDialog({
   const onSubmit = (values: CreateMultipleSecretsRequest) => {
     startTransition(async () => {
       await createSecret(id, values)
-
+      setOpen(false)
     })
   };
 

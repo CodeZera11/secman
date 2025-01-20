@@ -22,7 +22,6 @@ export class SecretsService {
       }
 
       const { label, value } = createSecretRequest;
-      console.log({ label, value, projectId });
 
       await prisma.secret.create({
         data: {
