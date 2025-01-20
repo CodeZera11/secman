@@ -39,12 +39,18 @@ type Digest = Parameters<typeof calculateJwkThumbprint>[1];
 export async function encode<Payload = JWT>(params: JWTEncodeParams<Payload>) {
   const { token = {}, secret, maxAge = DEFAULT_MAX_AGE, salt } = params;
   const secrets = Array.isArray(secret) ? secret : [secret];
-  const encryptionSecret = await getDerivedEncryptionKey(enc, secrets[0], salt);
+  if (!secrets.length) return;
+  const encryptionSecret = await getDerivedEncryptionKey(
+    enc,
+    secrets[0] || '',
+    salt,
+  );
 
   const thumbprint = await calculateJwkThumbprint(
     { kty: 'oct', k: base64url.encode(encryptionSecret) },
     `sha${encryptionSecret.byteLength << 3}` as Digest,
   );
+  if (!token) return;
   return await new EncryptJWT(token)
     .setProtectedHeader({ alg, enc, kid: thumbprint })
     .setIssuedAt()

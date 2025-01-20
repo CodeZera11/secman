@@ -17,10 +17,10 @@ const InputElement: React.FC<InputElementProps> = ({ name, label, placeholder, d
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={cn('', props.className)}>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Input {...field} placeholder={placeholder} className={cn('', props.className)} type={props.type} disabled={props.disabled} />
+            <Input {...field} placeholder={placeholder} className={cn('', props.className)} type={props.type} disabled={props.disabled} defaultValue={props.defaultValue} />
           </FormControl>
           {description && (
             <FormDescription>

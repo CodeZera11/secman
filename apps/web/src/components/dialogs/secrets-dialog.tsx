@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +8,16 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { Button } from "@repo/ui/components/ui/button";
-import { Input } from "@repo/ui/components/ui/input";
-import { Label } from "@repo/ui/components/ui/label";
 import { BsEye } from "react-icons/bs";
 import { Project } from "@/constants/types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CreateMultipleSecretsRequest, CreateMultipleSecretsSchema } from "@repo/types";
+import { Form } from "@repo/ui/components/ui/form";
+import InputElement from "@repo/ui/form-elements/input-element";
+import { useEffect, useState, useTransition } from "react";
+import { createProject } from "@/actions/projects";
+import { createSecret } from "@/actions/secrets";
 
 interface Secret {
   id: string;
@@ -25,16 +30,29 @@ interface SecretsDialogProps {
 }
 
 export function SecretsDialog({
-  project: { name, id, secrets }
+  project: { name, id, secrets: secretsData },
 }: SecretsDialogProps) {
+  const [secrets, setSecrets] = useState(secretsData.length || 1);
+  const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
 
+  const form = useForm({
+    resolver: zodResolver(CreateMultipleSecretsSchema),
+    defaultValues: {
+      secrets: secretsData,
+    }
+  })
 
-  const handleAddSecret = () => {
+  const onSubmit = (values: CreateMultipleSecretsRequest) => {
+    startTransition(async () => {
+      await createSecret(id, values)
 
+    })
   };
 
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="secondary"
@@ -42,34 +60,38 @@ export function SecretsDialog({
           className="flex items-center space-x-1"
         >
           <BsEye className="h-4 w-4" />
-          <span>See Secrets</span>
+          <span>Secrets</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[725px]">
         <DialogHeader>
           <DialogTitle>{name} Secrets</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          {secrets.map((secret) => (
-            <div
-              key={secret.id}
-              className="grid grid-cols-2 items-center gap-4"
-            >
-              <Label htmlFor={secret.id} className="text-right">
-                {secret.label}
-              </Label>
-              <Input
-                id={secret.id}
-                value={secret.value}
-                readOnly
-                className="col-span-1"
-              />
-            </div>
-          ))}
-        </div>
-        <Button onClick={handleAddSecret} className="w-full">
-          Add Secret
-        </Button>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+            {Array(secrets).fill(0).map((_, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-2 items-center gap-4 text-nowrap"
+              >
+                <InputElement name={`secrets[${i}].label`} placeholder="Key" />
+                <InputElement name={`secrets[${i}].value`} placeholder="Value" />
+                <InputElement
+                  name={`secrets[${i}].projectId`}
+                  placeholder="Project ID"
+                  defaultValue={id}
+                  className="hidden"
+                />
+              </div>
+            ))}
+            <Button variant='link' size="sm" type="button" onClick={() => setSecrets(prev => prev + 1)} className="w-fit text-neutral-200 h-fit px-0">
+              Add Secret
+            </Button>
+            <Button disabled={isPending} type="submit" className="w-full">
+              {isPending ? "Creating..." : "Submit"}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

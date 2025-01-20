@@ -1,4 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { prisma } from '@repo/db';
 import * as bcrypt from 'bcryptjs';
 import { encode } from '../../utils/encode';
@@ -18,6 +23,9 @@ export class AuthService {
       if (!existingUser) {
         throw new NotFoundException('User not found');
       }
+
+      if (!existingUser.password)
+        throw new InternalServerErrorException('Something went wrong!');
 
       const passwordMatch = await bcrypt.compare(
         password,

@@ -115,7 +115,7 @@ export const deleteProject = async (id: string) => {
   }
 };
 
-const getToken = async () => {
+export const getToken = async () => {
   const token = await getAuthToken();
   if (!token) {
     throw new Error("Please login to continue!");
