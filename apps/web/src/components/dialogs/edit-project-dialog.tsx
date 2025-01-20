@@ -13,7 +13,7 @@ const EditProjectDialog = ({ project }: { project: Project }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           variant="secondary"
           size="sm"

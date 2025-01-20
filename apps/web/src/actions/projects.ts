@@ -51,7 +51,7 @@ export const createProject = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    revalidateTag("posts");
+    revalidateTag("projects");
     const responseData: ServerResponse<Project> = await response.json();
 
     return responseData;

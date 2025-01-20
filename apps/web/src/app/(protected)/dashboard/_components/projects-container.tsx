@@ -64,7 +64,7 @@ const ProjectsContainer: React.FC<ProjectsContainerProps> = ({ projects }) => {
                   <p className="text-sm ">Updated: {format(new Date(updatedAt), "dd MMM yyyy, hh:mm a")}</p>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex justify-between w-full gap-10">
                 <EditProjectDialog project={project} />
                 <SecretsDialog project={project} />
               </CardFooter>

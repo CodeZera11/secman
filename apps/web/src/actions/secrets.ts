@@ -24,7 +24,7 @@ export const createSecret = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    revalidateTag("posts");
+    revalidateTag("projects");
     return { success: "Secrets added successfully!" };
   } catch (error) {
     console.log({ error });

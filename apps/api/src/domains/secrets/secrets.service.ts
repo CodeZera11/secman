@@ -8,7 +8,7 @@ import {
   type CreateSecretRequest,
 } from '@repo/types';
 import { prisma } from '@repo/db';
-import { encrypt } from 'src/utils/encryption';
+import { encryptSecret } from 'src/utils/encryption';
 
 @Injectable()
 export class SecretsService {
@@ -61,7 +61,10 @@ export class SecretsService {
 
       const secretsData = data.secrets.map((item) => ({
         ...item,
-        value: encrypt(userId, item.value),
+        value: encryptSecret({
+          userId: userId,
+          secretValue: item.value,
+        }),
         projectId: projectId,
       }));
 

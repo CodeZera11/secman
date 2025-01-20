@@ -8,7 +8,7 @@ import {
   CreateProjectRequest,
   type ProtectedEndPointBaseRequest,
 } from '@repo/types';
-import { decrypt } from 'src/utils/encryption';
+import { decryptSecret } from 'src/utils/encryption';
 
 @Injectable()
 export class ProjectsService {
@@ -49,7 +49,10 @@ export class ProjectsService {
     const decryptedProjects = projects.map((project) => {
       const decryptedSecrets = project.secrets.map((secret) => ({
         ...secret,
-        value: decrypt(user.user_id, secret.value),
+        value: decryptSecret({
+          userId: user.user_id,
+          encryptedValue: secret.value,
+        }),
       }));
 
       return {
