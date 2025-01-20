@@ -1,4 +1,5 @@
-import crypto from 'node:crypto';
+import { validatedEnv } from 'config/env.config';
+import crypto, { CipherKey } from 'node:crypto';
 
 /**
  * Generates a unique encryption key for a user by combining userId with master key
@@ -20,20 +21,17 @@ function generateUserKey(userId: string, masterKey: string) {
  * @param {string} secretValue - The secret value to encrypt
  * @returns {string} - Base64URL encoded encrypted value
  */
-function encrypt(
-  userId: string,
-  masterKey: string,
-  secretValue: string,
-): string {
-  if (!userId || !masterKey || !secretValue) {
+function encrypt(userId: string, secretValue: string): string {
+  if (!userId || !secretValue) {
     throw new Error('Missing required parameters');
   }
+
+  const masterKey = validatedEnv.ENCRYPTION_MASTER_KEY;
 
   const userKey = generateUserKey(userId, masterKey);
   const iv = crypto.randomBytes(16);
 
-  // @ts-ignore
-  const cipher = crypto.createCipheriv('aes-256-cbc', userKey, iv);
+  const cipher = crypto.createCipheriv('aes-256-cbc', userKey as CipherKey, iv);
 
   const encrypted = Buffer.concat([
     iv,
@@ -51,23 +49,23 @@ function encrypt(
  * @param {string} encryptedValue - Base64URL encoded encrypted value
  * @returns {string} - Decrypted secret value
  */
-function decrypt(
-  userId: string,
-  masterKey: string,
-  encryptedValue: string,
-): string {
-  if (!userId || !masterKey || !encryptedValue) {
+function decrypt(userId: string, encryptedValue: string): string {
+  if (!userId || !encryptedValue) {
     throw new Error('Missing required parameters');
   }
 
+  const masterKey = validatedEnv.ENCRYPTION_MASTER_KEY;
   const userKey = generateUserKey(userId, masterKey);
 
   const encrypted = Buffer.from(encryptedValue, 'base64url');
   const iv = encrypted.subarray(0, 16);
   const ciphertext = encrypted.subarray(16);
 
-  // @ts-ignore
-  const decipher = crypto.createDecipheriv('aes-256-cbc', userKey, iv);
+  const decipher = crypto.createDecipheriv(
+    'aes-256-cbc',
+    userKey as CipherKey,
+    iv,
+  );
 
   const decrypted = Buffer.concat([
     decipher.update(ciphertext),
@@ -78,27 +76,3 @@ function decrypt(
 }
 
 export { encrypt, decrypt };
-
-// Example usage:
-const MASTER_KEY =
-  process.env.ENCRYPTION_MASTER_KEY ||
-  'MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=';
-
-// Example usage with types
-async function example() {
-  const userId = 'user123';
-  const secretValue = 'My secret data';
-
-  try {
-    const encrypted = encrypt(userId, MASTER_KEY, secretValue);
-    console.log('Encrypted:', encrypted);
-
-    const decrypted = decrypt(userId, MASTER_KEY, encrypted);
-    console.log('Decrypted:', decrypted);
-  } catch (error) {
-    console.error(
-      'Encryption/Decryption error:',
-      error instanceof Error ? error.message : String(error),
-    );
-  }
-}

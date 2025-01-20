@@ -1,5 +1,4 @@
 import { ZodSchema } from 'zod';
-import { ProtectedEndPointBaseSchema } from '@repo/types';
 import { BadRequestException, PipeTransform } from '@nestjs/common';
 
 export class ZodValidationPipe implements PipeTransform {
@@ -12,12 +11,6 @@ export class ZodValidationPipe implements PipeTransform {
   ) {}
 
   transform(value: any) {
-    const isProtected = this.options?.protected || false;
-    if (isProtected) {
-      const authSchema = this.schema.and(ProtectedEndPointBaseSchema);
-      this.schema = authSchema;
-    }
-
     const parsedValue = this.schema.safeParse(value);
     console.log({ parsedValue, value });
     if (!parsedValue.success) {

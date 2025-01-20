@@ -8,6 +8,7 @@ import {
   type CreateSecretRequest,
 } from '@repo/types';
 import { prisma } from '@repo/db';
+import { encrypt } from 'src/utils/encryption';
 
 @Injectable()
 export class SecretsService {
@@ -37,7 +38,11 @@ export class SecretsService {
     }
   }
 
-  async createBulk(projectId: string, data: CreateMultipleSecretsRequest) {
+  async createBulk(
+    userId: string,
+    projectId: string,
+    data: CreateMultipleSecretsRequest,
+  ) {
     try {
       const existingProject = await prisma.project.findUnique({
         where: { id: projectId },
@@ -48,7 +53,6 @@ export class SecretsService {
         throw new NotFoundException('Project not found');
       }
 
-      // first delete the existing ones
       await prisma.secret.deleteMany({
         where: {
           projectId,
@@ -57,6 +61,7 @@ export class SecretsService {
 
       const secretsData = data.secrets.map((item) => ({
         ...item,
+        value: encrypt(userId, item.value),
         projectId: projectId,
       }));
 

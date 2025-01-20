@@ -8,6 +8,7 @@ import {
   CreateProjectRequest,
   type ProtectedEndPointBaseRequest,
 } from '@repo/types';
+import { decrypt } from 'src/utils/encryption';
 
 @Injectable()
 export class ProjectsService {
@@ -45,7 +46,19 @@ export class ProjectsService {
       },
     });
 
-    return projects;
+    const decryptedProjects = projects.map((project) => {
+      const decryptedSecrets = project.secrets.map((secret) => ({
+        ...secret,
+        value: decrypt(user.user_id, secret.value),
+      }));
+
+      return {
+        ...project,
+        secrets: decryptedSecrets,
+      };
+    });
+
+    return decryptedProjects;
   }
 
   async update(
@@ -73,7 +86,6 @@ export class ProjectsService {
         'You are not authorized to delete this project!',
       );
 
-    console.log('updating...');
     const updatedProject = await prisma.project.update({
       where: {
         id,
@@ -106,8 +118,6 @@ export class ProjectsService {
       throw new UnauthorizedException(
         'You are not authorized to delete this project!',
       );
-
-    console.log('deleting...');
 
     const deletedProject = await prisma.project.delete({
       where: {

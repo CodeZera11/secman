@@ -2,11 +2,13 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { SecretsService } from './secrets.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import {
+  CreateMultipleSecretsSchema,
   type CreateMultipleSecretsRequest,
   type CreateSecretRequest,
 } from '@repo/types';
 import { ResponseMessage } from 'src/decorators/response-message.decorator';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 
 @Controller('secrets')
 export class SecretsController {
@@ -27,9 +29,11 @@ export class SecretsController {
   @ResponseMessage('Secret created successfully')
   createBulk(
     @Param('projectId') projectId: string,
-    @Body() data: CreateMultipleSecretsRequest,
+    @CurrentUser('user_id') userId: string,
+    @Body(new ZodValidationPipe(CreateMultipleSecretsSchema))
+    data: CreateMultipleSecretsRequest,
   ) {
-    return this.secretsService.createBulk(projectId, data);
+    return this.secretsService.createBulk(userId, projectId, data);
   }
 
   @Get(':projectId')
